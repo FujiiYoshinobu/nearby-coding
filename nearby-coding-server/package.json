@@ -1,0 +1,12 @@
+{
+  "name": "nearby-coding-server",
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=18.x"
+  },
+  "scripts": {
+    "build": "echo 'No build step required'",
+    "start": "echo 'Edge functions do not require a start script'"
+  }
+}

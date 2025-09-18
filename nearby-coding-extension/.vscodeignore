@@ -1,0 +1,14 @@
+src/**/*.ts
+!src/**/*.d.ts
+node_modules
+.gitignore
+.vscode
+webpack.config.js
+tsconfig.json
+.eslintrc.json
+**/*.map
+**/.DS_Store
+../**
+**/node_modules
+**/yarn.lock
+../nearby-coding-server

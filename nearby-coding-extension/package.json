@@ -1,0 +1,69 @@
+{
+  "name": "nearby-coding-extension",
+  "displayName": "Nearby Coding",
+  "description": "リアルタイムで他の開発者を確認",
+  "version": "0.1.0",
+  "publisher": "nearby-coding",
+  "engines": {
+    "vscode": ">=1.70.0"
+  },
+  "categories": ["Other"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "nearbyCoding.plaza",
+          "name": "Nearby Coding",
+          "type": "webview",
+          "icon": "$(people)"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Nearby Coding",
+      "properties": {
+        "nearbyCoding.serverUrl": {
+          "type": "string",
+          "default": "https://nearby-coding-server-i3mbz1w0s-fujii-yoshinobus-projects.vercel.app/api/nearby",
+          "description": "Nearby Codingサーバーのエンドポイント"
+        },
+        "nearbyCoding.name": {
+          "type": "string",
+          "default": "Anonymous",
+          "description": "表示名"
+        },
+        "nearbyCoding.message": {
+          "type": "string",
+          "default": "よろしく！",
+          "description": "挨拶メッセージ"
+        },
+        "nearbyCoding.avatar": {
+          "type": "string",
+          "default": "🧑‍💻",
+          "description": "アバター絵文字またはURL"
+        }
+      }
+    }
+  },
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:nearbyCoding.plaza"
+  ],
+  "scripts": {
+    "build": "webpack --mode production",
+    "watch": "webpack --watch",
+    "package": "vsce package"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/vscode": "^1.70.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^4.8.0",
+    "webpack": "^5.0.0",
+    "webpack-cli": "^4.0.0",
+    "ts-loader": "^9.0.0",
+    "@vscode/vsce": "^2.0.0"
+  }
+}

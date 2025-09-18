@@ -1,0 +1,15 @@
+{
+  "name": "nearby-coding-monorepo",
+  "private": true,
+  "workspaces": [
+    "nearby-coding-server",
+    "nearby-coding-extension"
+  ],
+  "scripts": {
+    "install": "yarn install",
+    "server:dev": "cd nearby-coding-server && vercel dev",
+    "extension:build": "cd nearby-coding-extension && yarn build",
+    "extension:watch": "cd nearby-coding-extension && yarn watch",
+    "extension:package": "cd nearby-coding-extension && vsce package"
+  }
+}

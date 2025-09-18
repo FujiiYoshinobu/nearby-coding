@@ -1,0 +1,35 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .path { fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .person { fill: #ffffff; }
+    </style>
+  </defs>
+  
+  <!-- 背景円 -->
+  <circle cx="64" cy="64" r="60" fill="#1e1e1e" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- 道/レーン -->
+  <path class="path" d="M10 64 L118 64"/>
+  <path class="path" d="M10 50 L118 50"/>
+  <path class="path" d="M10 78 L118 78"/>
+  
+  <!-- 左の人物（シンプルな円と線） -->
+  <circle cx="35" cy="45" r="6" class="person"/>
+  <path class="path" d="M35 51 L35 70"/>
+  <path class="path" d="M30 58 L40 58"/>
+  <path class="path" d="M35 70 L30 80"/>
+  <path class="path" d="M35 70 L40 80"/>
+  
+  <!-- 右の人物 -->
+  <circle cx="93" cy="72" r="6" class="person"/>
+  <path class="path" d="M93 78 L93 97"/>
+  <path class="path" d="M88 85 L98 85"/>
+  <path class="path" d="M93 97 L88 107"/>
+  <path class="path" d="M93 97 L98 107"/>
+  
+  <!-- 動きを表す軌跡線（点線） -->
+  <path class="path" d="M20 64 L45 45" stroke-dasharray="3,3" opacity="0.6"/>
+  <path class="path" d="M108 64 L83 72" stroke-dasharray="3,3" opacity="0.6"/>
+  
+</svg>
