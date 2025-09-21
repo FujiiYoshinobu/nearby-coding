@@ -1,42 +1,13 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const extensionConfig = {
-  target: 'node',
-  mode: 'none',
-  entry: './src/extension.ts',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'extension.js',
-    libraryTarget: 'commonjs2',
-    clean: false
-  },
-  resolve: {
-    extensions: ['.ts', '.js']
-  },
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        use: 'ts-loader',
-        exclude: /node_modules/
-      }
-    ]
-  },
-  externals: {
-    vscode: 'commonjs vscode'
-  },
-  devtool: 'source-map'
-};
-
-const webviewConfig = {
-  target: 'web',
+module.exports = {
   mode: 'development',
   entry: './src/webview/index.tsx',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dev-dist'),
     filename: 'webview.js',
-    clean: false
+    clean: true
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx']
@@ -67,10 +38,16 @@ const webviewConfig = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/webview/template.html',
-      filename: 'webview.html'
+      filename: 'index.html'
     })
   ],
-  devtool: 'source-map'
+  devServer: {
+    contentBase: path.join(__dirname, 'dev-dist'),
+    compress: true,
+    port: 3000,
+    hot: true,
+    open: true,
+    historyApiFallback: true
+  },
+  devtool: 'inline-source-map'
 };
-
-module.exports = [extensionConfig, webviewConfig];

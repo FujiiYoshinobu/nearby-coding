@@ -6,7 +6,8 @@
     "lib": ["ES2020", "dom"],
     "declaration": true,
     "sourceMap": true,
-    "types": ["node", "vscode"]
+    "types": ["node", "vscode"],
+    "jsx": "react-jsx"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

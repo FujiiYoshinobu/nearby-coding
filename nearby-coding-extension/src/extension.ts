@@ -1,5 +1,14 @@
 import * as vscode from 'vscode';
 
+function getNonce() {
+  let text = '';
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (let i = 0; i < 32; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+}
+
 interface User {
   id: string;
   name: string;
@@ -67,197 +76,20 @@ export class NearbyCodingViewProvider implements vscode.WebviewViewProvider {
   }
 
   private _getHtmlForWebview(webview: vscode.Webview): string {
+    const webviewJsUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionContext.extensionUri, 'dist', 'webview.js'));
+    const nonce = getNonce();
+
     return `<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'nonce-${nonce}'; style-src ${webview.cspSource} 'unsafe-inline'; connect-src https:;">
     <title>Nearby Coding</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #141414;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .plaza {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            background: linear-gradient(180deg, #141414 0%, #1e1e1e 100%);
-        }
-        
-        .self-avatar {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2em;
-            z-index: 100;
-        }
-        
-        .visitor {
-            position: absolute;
-            right: -100px;
-            top: 20%;
-            animation: slideIn 1s ease-in-out forwards;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 50;
-        }
-        
-        .visitor.leaving {
-            animation: slideOut 1s ease-in-out forwards;
-        }
-        
-        .avatar {
-            font-size: 1.5em;
-        }
-        
-        .message-bubble {
-            background-color: white;
-            color: #333;
-            padding: 8px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        @keyframes slideIn {
-            0% { 
-                right: -200px; 
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            50% { 
-                right: 20px; 
-                opacity: 1;
-                transform: translateY(0);
-            }
-            100% { 
-                right: 30px; 
-                opacity: 1;
-            }
-        }
-        
-        @keyframes slideOut {
-            0% { 
-                right: 30px; 
-                opacity: 1;
-            }
-            100% { 
-                right: -200px; 
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-        }
-        
-        .lane {
-            position: absolute;
-            width: 100%;
-            height: 60px;
-            background-color: rgba(30, 30, 30, 0.3);
-            border-radius: 8px;
-        }
-        
-        .lane:nth-child(1) { top: 15%; }
-        .lane:nth-child(2) { top: 35%; }
-        .lane:nth-child(3) { top: 55%; }
-    </style>
 </head>
 <body>
-    <div class="plaza">
-        <div class="lane"></div>
-        <div class="lane"></div>
-        <div class="lane"></div>
-        
-        <div class="self-avatar" id="selfAvatar">🧑‍💻</div>
-    </div>
-
-    <script>
-        function escapeHtml(unsafe) {
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-        
-        let activeVisitors = new Set();
-        let lastSeenUsers = new Map();
-        
-        function showVisitor(user) {
-            // 既に表示中の場合はスキップ
-            if (activeVisitors.has(user.id)) {
-                return;
-            }
-            
-            const visitor = document.createElement('div');
-            visitor.className = 'visitor';
-            visitor.id = 'visitor-' + user.id;
-            
-            // ランダムな高さに配置
-            const topPercent = 10 + Math.random() * 60;
-            visitor.style.top = topPercent + '%';
-            
-            visitor.innerHTML = \`
-                <div class="message-bubble">
-                    <strong>\${escapeHtml(user.name)}:</strong> \${escapeHtml(user.message)}
-                </div>
-                <div class="avatar">\${escapeHtml(user.avatar)}</div>
-            \`;
-            
-            document.querySelector('.plaza').appendChild(visitor);
-            activeVisitors.add(user.id);
-            
-            // 5-7秒後に退場
-            const exitTime = 5000 + Math.random() * 2000;
-            setTimeout(() => {
-                if (document.getElementById('visitor-' + user.id)) {
-                    visitor.classList.add('leaving');
-                    setTimeout(() => {
-                        if (visitor.parentNode) {
-                            visitor.parentNode.removeChild(visitor);
-                        }
-                        activeVisitors.delete(user.id);
-                    }, 1000);
-                }
-            }, exitTime);
-        }
-        
-        // VSCodeからのメッセージを受信
-        window.addEventListener('message', event => {
-            const message = event.data;
-            
-            switch (message.command) {
-                case 'updateUsers':
-                    // 自分のアバターを更新
-                    if (message.selfAvatar) {
-                        document.getElementById('selfAvatar').textContent = message.selfAvatar;
-                    }
-                    
-                    // 新規ユーザーまたは再参加ユーザーのみを挨拶表示
-                    if (message.newUsers && message.newUsers.length > 0) {
-                        message.newUsers.forEach(user => {
-                            if (user.id !== message.selfId && !activeVisitors.has(user.id)) {
-                                showVisitor(user);
-                            }
-                        });
-                    }
-                    break;
-            }
-        });
-    </script>
+    <div id="root"></div>
+    <script nonce="${nonce}" src="${webviewJsUri}"></script>
 </body>
 </html>`;
   }

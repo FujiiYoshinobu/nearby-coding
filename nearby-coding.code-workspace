@@ -1,0 +1,71 @@
+{
+  "folders": [
+    {
+      "name": "Extension",
+      "path": "./nearby-coding-extension"
+    },
+    {
+      "name": "Server", 
+      "path": "./nearby-coding-server"
+    }
+  ],
+  "settings": {
+    "typescript.preferences.rootPath": "./nearby-coding-extension"
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.vscode-typescript-next"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Run Extension",
+        "type": "extensionHost",
+        "request": "launch",
+        "args": [
+          "--extensionDevelopmentPath=${workspaceFolder}/nearby-coding-extension"
+        ],
+        "outFiles": [
+          "${workspaceFolder}/nearby-coding-extension/dist/**/*.js"
+        ],
+        "preLaunchTask": "extension: build"
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "extension: build",
+        "type": "shell",
+        "command": "yarn",
+        "args": ["build"],
+        "group": "build",
+        "options": {
+          "cwd": "${workspaceFolder}/nearby-coding-extension"
+        },
+        "presentation": {
+          "reveal": "silent"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "extension: watch",
+        "type": "shell", 
+        "command": "yarn",
+        "args": ["watch-webview"],
+        "group": "build",
+        "options": {
+          "cwd": "${workspaceFolder}/nearby-coding-extension"
+        },
+        "isBackground": true,
+        "presentation": {
+          "reveal": "silent"
+        },
+        "problemMatcher": []
+      }
+    ]
+  }
+}
