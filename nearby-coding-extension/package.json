@@ -33,7 +33,7 @@
       "properties": {
         "nearbyCoding.serverUrl": {
           "type": "string",
-          "default": "https://nearby-coding-server-i3mbz1w0s-fujii-yoshinobus-projects.vercel.app/api/nearby",
+          "default": "https://nearby-coding-server-nmfq39ynx-fujii-yoshinobus-projects.vercel.app/api/nearby",
           "description": "Nearby Codingサーバーのエンドポイント"
         },
         "nearbyCoding.name": {
@@ -50,6 +50,17 @@
           "type": "string",
           "default": "🧑‍💻",
           "description": "アバター絵文字またはURL"
+        },
+        "nearbyCoding.avatarType": {
+          "type": "string",
+          "enum": ["human", "cat", "robot", "wizard", "dragon", "bug"],
+          "default": "human",
+          "description": "アバタータイプ"
+        },
+        "nearbyCoding.autoLogin": {
+          "type": "boolean",
+          "default": true,
+          "description": "VSCode起動時に自動ログイン"
         }
       }
     }

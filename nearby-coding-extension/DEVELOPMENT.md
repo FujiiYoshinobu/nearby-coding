@@ -1,4 +1,6 @@
-# Nearby Coding Extension - React Development Guide
+# 出社アバター Extension - Development Guide
+
+本拡張機能は、VSCode での開発体験をゲーミフィケーションする「出社アバター」機能を提供します。
 
 ## 概要
 

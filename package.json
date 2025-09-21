@@ -6,10 +6,18 @@
     "nearby-coding-extension"
   ],
   "scripts": {
-    "install": "yarn install",
-    "server:dev": "cd nearby-coding-server && vercel dev",
-    "extension:build": "cd nearby-coding-extension && yarn build",
-    "extension:watch": "cd nearby-coding-extension && yarn watch",
-    "extension:package": "cd nearby-coding-extension && vsce package"
+    "install": "echo 'Use yarn install directly'",
+    "build": "yarn workspace nearby-coding-extension run build",
+    "dev": "concurrently \"npm run server:dev\" \"npm run extension:watch\"",
+    "server:dev": "yarn workspace nearby-coding-server run dev",
+    "server:deploy": "yarn workspace nearby-coding-server run deploy", 
+    "extension:build": "yarn workspace nearby-coding-extension run build",
+    "extension:watch": "yarn workspace nearby-coding-extension run watch",
+    "extension:package": "yarn workspace nearby-coding-extension run package",
+    "clean": "rimraf node_modules nearby-coding-*/node_modules",
+    "fresh": "npm run clean && yarn install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

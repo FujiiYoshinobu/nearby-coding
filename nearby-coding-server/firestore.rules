@@ -1,0 +1,23 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ユーザーコレクション（読み取り専用、API経由でのみ更新）
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    
+    // ログインコレクション（読み取り専用、API経由でのみ更新）
+    match /logins/{loginId} {
+      allow read: if true; 
+      allow write: if false;
+    }
+    
+    // 遭遇コレクション（読み取り専用、API経由でのみ更新）
+    match /encounters/{encounterId} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

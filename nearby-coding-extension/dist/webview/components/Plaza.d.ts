@@ -1,10 +1,12 @@
 import React from "react";
-import { User } from "./App";
+import { LevelUpEvent, User, XPEvent } from "../../types";
 interface PlazaProps {
     users: User[];
     newUsers: User[];
-    selfId: string;
-    selfAvatar: string;
+    user: User;
+    xpEvents: XPEvent[];
+    levelUpEvent: LevelUpEvent | null;
+    onBackToSetup: () => void;
 }
 declare const Plaza: React.FC<PlazaProps>;
 export default Plaza;

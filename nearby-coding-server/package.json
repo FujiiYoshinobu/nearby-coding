@@ -7,6 +7,14 @@
   },
   "scripts": {
     "build": "echo 'No build step required'",
-    "start": "echo 'Edge functions do not require a start script'"
+    "start": "echo 'Edge functions do not require a start script'",
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  },
+  "devDependencies": {
+    "@vercel/node": "^3.0.0"
   }
 }
